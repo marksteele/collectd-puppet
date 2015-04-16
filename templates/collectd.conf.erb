@@ -1,0 +1,55 @@
+# This file is managed by puppet.
+<% if @config.is_a?(Hash) && !@config.empty? -%>
+<% @config.keys.sort.each do |k| -%>
+<%= k %> "<%= @config[k] %>"
+<% end -%>
+<% end -%>
+
+<% if @collectd_core_plugins.is_a?(Hash) && !@collectd_core_plugins.empty? -%>
+<% @collectd_core_plugins.keys.sort.each do |k| -%>
+LoadPlugin <%= k %>
+<% if @collectd_core_plugins[k].is_a?(Hash) -%>
+<Plugin <%= k %>>
+<% @collectd_core_plugins[k].keys.sort.each do |v| -%>
+<% if @collectd_core_plugins[k][v].is_a?(Hash) -%>
+  <Instance "<%= v -%>">
+<% @collectd_core_plugins[k][v].keys.sort.each do |kv| -%>
+    <%= kv -%> "<%= @collectd_core_plugins[k][v][kv] -%>"
+<% end -%>
+  </Instance>
+<% else -%>
+  <%= v %> "<%= @collectd_core_plugins[k][v] %>"  
+<% end -%>
+<% end -%>
+</Plugin>
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if @perl_engine_config.is_a?(Hash) && !@perl_engine_config.empty? -%>
+<LoadPlugin perl>
+<% @perl_engine_config.keys.sort.each do |k| -%>
+  <%= k %> <%= @perl_engine_config[k] %>
+<% end -%>
+</LoadPlugin>
+<% end -%>
+
+<% if @perl_plugin_config.is_a?(Hash) && !@perl_plugin_config.empty? -%>
+<Plugin perl>
+<% @perl_plugin_config.keys.sort.each do |k| -%>
+  <%= k %> "<%= @perl_plugin_config[k] %>"
+<% end -%>
+<% if @collectd_perl_plugins.is_a?(Hash) && !@collectd_perl_plugins.empty? -%>
+<% @collectd_perl_plugins.keys.sort.each do |k| -%>
+  LoadPlugin "<%= k %>"
+<% if @collectd_perl_plugins[k].is_a?(Hash) -%>
+  <Plugin <%= k -%>>
+<% @collectd_perl_plugins[k].keys.sort.each do |kv| -%>
+    <%= kv -%> "<%= @collectd_perl_plugins[k][kv] -%>"
+<% end -%>
+  </Plugin>
+<% end -%>
+<% end -%>
+<% end -%>
+</Plugin>
+<% end -%>

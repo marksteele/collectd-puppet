@@ -1,0 +1,45 @@
+<% if @config.is_a?(Hash) && !@config.empty? -%>
+<% @config.keys.sort.each do |k| -%>
+<%= k %> "<%= @config[k] %>"
+<% end -%>
+<% end -%>
+
+<% if @core_plugins.is_a?(Hash) && !@core_plugins.empty? -%>
+<% @config.keys.sort.each do |k| -%>
+LoadPlugin <%= k %>
+<% if @core_plugins[k].is_a?(Hash) -%>
+<Plugin <%= k %>>
+<% @core_plugins[k].keys.sort.each do |kv| -%>
+  <% kv %> "<%= @core_plugins[k][kv] %>"  
+</Plugin>
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if @perl_engine_config.is_a?(Hash) && !@perl_engine_config.empty? -%>
+<LoadPlugin perl>
+<% @perl_engine_config.keys.sort.each do |k| -%>
+  <%= k %> "<%= @perl_engine_config[k] %>"
+<% end -%>
+</LoadPlugin>
+<% end -%>
+
+<% if @perl_plugin_config.is_a?(Hash) && !@perl_plugin_config.empty? -%>
+  <Plugin perl>
+  <% @perl_plugin_config.keys.sort.each do |k| -%>
+    <%= k %> "<%= @perl_plugin_config[k] %>"
+  <% end -%>
+  <% if @perl_plugins.is_a?(Hash) && !@perl_plugins.empty? -%>
+    <% @perl_plugins.keys.sort.each do |k| -%>
+      LoadPlugin "<%= k %>"
+      <% if @perl_plugins[k].is_a?(Hash) -%>
+        <Plugin <%= k -%>>>
+        <% @perl_plugins[k].keys.sort.each do |kv| -%>
+          <%= kv -%> "<%= @perl_plugins[k][kv] -%>"
+        <% end -%>
+        </Plugin>
+      <% end -%>
+    <% end -%>
+  </Plugin>
+  <% end -%>
+<% end -%>
