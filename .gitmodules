@@ -1,3 +1,0 @@
-[submodule "files/collectd-plugins"]
-	path = files/collectd-plugins
-	url = https://github.com/marksteele/collectd-plugins.git
